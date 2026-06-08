@@ -19,6 +19,12 @@
             <div data-bind="text: nombre, hidden: esNuevo" class="fw-bold">
             </div>
 
+            <div name="pasos-resumen" data-bind="visible: pasosTotal() > 0">
+                <span data-bind="text: pasosRealizados"></span> /
+                <span data-bind="text: pasosTotal"></span>
+                <span data-bind="text: porcetanjeCalculado"></span>
+            </div>
+
             <input type="text" name="titulo-tarea" autocomplete="off" 
                 data-bind="value: nombre, visible: esNuevo, attr: {'data-id': id}, event: {focusout: manejarFocusTitulo}"/>
         </div>
@@ -39,10 +45,12 @@
 {
     <script src="~/js/utilidades.js" asp-append-version="true"></script>
     <script src="~/js/tareas.js" asp-append-version="true"></script>
+    <script src="~/js/pasos.js" asp-append-version="true"></script>
 
     <script>
 
-        const urlTarea = "api/tareas";
+        const urlTarea = "/api/tareas";
+        const urlPasos = "/api/pasos";
 
         const modalEditar = document.getElementById('modal-editar');
         const modalEditarBootstrap = new bootstrap.Modal(modalEditar);
@@ -61,27 +69,51 @@
             })
         }
 
-        function tareaElementoViewModel({id, nombre}) {
+        function tareaElementoViewModel({id, nombre, pasosTotal, pasosRealizados}) {
             var self = this;
             self.id = ko.observable(id);
             self.nombre = ko.observable(nombre);
 
+            self.pasosTotal = ko.observable(pasosTotal);
+            self.pasosRealizados = ko.observable(pasosRealizados);
+
             self.esNuevo = ko.pureComputed(function(){
                 return self.id() == 0;
             })
+
+            self.porcetanjeCalculado = ko.pureComputed(function(){
+                const calculo = Math.round(self.pasosRealizados() * 1.0 / self.pasosTotal() * 100);
+
+                return `(${calculo}%)`;
+            });
         }
 
         const tareaEditarVM = {
             id: 0,
             nombre: ko.observable(''),
-            descripcion: ko.observable('')
+            descripcion: ko.observable(''),
+            pasos: ko.observableArray([])
         }
 
         const tareaListadoViewModel = new tareaListadoViewModelFn();
         
+        function pasoViewModel({id, descripcion, realizado, modoEdit}){
+            var self = this;
+            
+            self.id = ko.observable(id || 0);
+            self.descripcion = ko.observable(descripcion || '');
+            self.descripcionAnterior = '';
+            self.realizado = ko.observable(realizado);
+            self.modoEdit = ko.observable(modoEdit);
+
+            self.esNuevo = ko.pureComputed(function (){
+                return self.id() == 0;
+            })
+        }
+        
         obtenerTareas();
 
         ko.applyBindings(tareaListadoViewModel, document.getElementById('contenedor-listado-tareas'));
-         ko.applyBindings(tareaEditarVM, document.getElementById('modal-editar'));
+        ko.applyBindings(tareaEditarVM, document.getElementById('modal-editar'));
     </script>
 }

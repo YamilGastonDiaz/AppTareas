@@ -29,9 +29,11 @@ namespace AppTareas.Controllers
                 .Select(t => new TareaDto
                 {
                     Id = t.Id,
-                    Nombre = t.Nombre
-                })
-                .ToListAsync();
+                    Nombre = t.Nombre,
+
+                    PasosTotal = t.Pasos.Count(),
+                    PasosRealizados = t.Pasos.Count(p => p.Realizado)
+                }).ToListAsync();
 
             return tareas;
         }
@@ -41,7 +43,9 @@ namespace AppTareas.Controllers
         {
             var usuarioId = _servicioUsuarios.ObtenerUsuarioId();
 
-            var tarea = await _context.Tareas.FirstOrDefaultAsync(t => t.Id == id && t.UsuarioCreacionId == usuarioId);
+            var tarea = await _context.Tareas
+                .Include(t => t.Pasos.OrderBy(p => p.Orden))
+                .FirstOrDefaultAsync(t => t.Id == id && t.UsuarioCreacionId == usuarioId);
 
             if (tarea is null)
             {

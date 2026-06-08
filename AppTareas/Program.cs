@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,10 @@ var politicaUsuariosAutenticados = new AuthorizationPolicyBuilder()
 builder.Services.AddControllersWithViews(opciones => 
 {
     opciones.Filters.Add(new AuthorizeFilter(politicaUsuariosAutenticados));
-}).AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
+}).AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).AddJsonOptions(opciones =>
+{
+    opciones.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
 builder.Services.AddDbContext<ApplicationDbContext>(opciones => opciones.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")));
