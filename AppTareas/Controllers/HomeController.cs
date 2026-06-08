@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using AppTareas.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace AppTareas.Controllers
 {

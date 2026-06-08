@@ -1,0 +1,38 @@
+﻿<div class="modal fade" id="modal-editar" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editar-titulo" data-bind="text: nombre"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="txtTituloCrearTarea"
+                                   placeholder="nombre"
+                                   autocomplete="off"
+                                   data-bind="value: nombre, event: {change: CambioEditarTarea}" />
+                            <label for="txtTituloCrearTarea">Título de la tarea</label>
+                        </div>
+                        <div class="mb-3">
+                            <label>Descripción</label>
+                            <textarea type="text" class="form-control" rows="4"
+                                      data-bind="value: descripcion,
+                                        event: {change: CambioEditarTarea}">
+
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <button data-bind="{click: BorrarTarea}"
+                                class="btn btn-secondary mb-2 w-100 text-start">
+                            <i class="bi bi-x-lg"></i>
+                            Borrar tarea
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
