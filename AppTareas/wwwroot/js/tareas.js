@@ -125,6 +125,11 @@ async function clickTarea(tarea) {
         )
     })
 
+    console.log(JSON.stringify(json, null, 2));
+    tareaEditarVM.archivoAdjuntos([]);
+
+    prepararArchivosAdjuntos(json.archivoAdjuntos);
+
     modalEditarBootstrap.show();
 }
 

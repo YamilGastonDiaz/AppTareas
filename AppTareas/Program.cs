@@ -29,6 +29,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(opciones => opciones.UseSqlS
 builder.Services.AddAuthentication();
 
 builder.Services.AddTransient<IServicioUsuarios, ServicioUsuarios>();
+builder.Services.AddTransient<IAlmacenadorArchivo, AlmacenadorArchivosLocal>();
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(opciones => 
 {

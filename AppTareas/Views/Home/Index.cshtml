@@ -6,7 +6,7 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">@localizer["Mis Tareas"]</h1>    
+    <h1 class="display-4">@localizer["Mis Tareas"]</h1>
 </div>
 
 <div>
@@ -25,8 +25,8 @@
                 <span data-bind="text: porcetanjeCalculado"></span>
             </div>
 
-            <input type="text" name="titulo-tarea" autocomplete="off" 
-                data-bind="value: nombre, visible: esNuevo, attr: {'data-id': id}, event: {focusout: manejarFocusTitulo}"/>
+            <input type="text" name="titulo-tarea" autocomplete="off"
+                   data-bind="value: nombre, visible: esNuevo, attr: {'data-id': id}, event: {focusout: manejarFocusTitulo}" />
         </div>
     </div>
 
@@ -39,18 +39,20 @@
     </div>
 </div>
 
-<partial name="_ModalEditarTarea"/>
+<partial name="_ModalEditarTarea" />
 
 @section Scripts
 {
     <script src="~/js/utilidades.js" asp-append-version="true"></script>
     <script src="~/js/tareas.js" asp-append-version="true"></script>
     <script src="~/js/pasos.js" asp-append-version="true"></script>
+    <script src="~/js/archivos-adjuntos.js" asp-append-version="true"></script>
 
     <script>
 
         const urlTarea = "/api/tareas";
         const urlPasos = "/api/pasos";
+        const urlArchivos = "/api/archivos";
 
         const modalEditar = document.getElementById('modal-editar');
         const modalEditarBootstrap = new bootstrap.Modal(modalEditar);
@@ -92,14 +94,15 @@
             id: 0,
             nombre: ko.observable(''),
             descripcion: ko.observable(''),
-            pasos: ko.observableArray([])
+            pasos: ko.observableArray([]),
+            archivoAdjuntos: ko.observableArray([])
         }
 
         const tareaListadoViewModel = new tareaListadoViewModelFn();
-        
+
         function pasoViewModel({id, descripcion, realizado, modoEdit}){
             var self = this;
-            
+
             self.id = ko.observable(id || 0);
             self.descripcion = ko.observable(descripcion || '');
             self.descripcionAnterior = '';
@@ -110,7 +113,17 @@
                 return self.id() == 0;
             })
         }
-        
+
+        function archivoAdjuntoViewModel({id, titulo, publicado, modoEdicion, orden, url}){
+             var self = this;
+             self.id = id;
+             self.titulo = ko.observable(titulo || '');
+             self.publicado = publicado;
+             self.modoEdit = ko.observable(modoEdicion);
+             self.orden = orden;
+             self.url = url;
+        }
+
         obtenerTareas();
 
         ko.applyBindings(tareaListadoViewModel, document.getElementById('contenedor-listado-tareas'));
