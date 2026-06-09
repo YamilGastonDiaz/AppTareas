@@ -10,7 +10,7 @@
 
 ---
 
-## 🛠️ Tecnologías y conceptos utilizados
+## Tecnologías y conceptos utilizados
 
 * **Framework**: ASP.NET Core MVC & Web API
 * **Acceso a Datos**: Entity Framework Core
